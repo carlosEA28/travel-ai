@@ -18,6 +18,7 @@ import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
+import Image from "next/image";
 
 const formSchema = z.object({
   full_name: z.string().trim().min(1, "Nome obrigatório"),
@@ -59,6 +60,22 @@ const SignUpFormComponent = () => {
           setIsLoading(false);
           if (context.error.code === "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL") {
             toast.error("Email já cadastrado");
+          }
+        },
+      },
+    });
+  }
+
+  async function onGoogleSubmit() {
+    await authClient.signIn.social({
+      provider: "google",
+      fetchOptions: {
+        onSuccess: () => {
+          router.push("/");
+        },
+        onError(context) {
+          if (context.error) {
+            toast.error(context.error.message);
           }
         },
       },
@@ -130,6 +147,20 @@ const SignUpFormComponent = () => {
           )}
         </Button>
       </form>
+
+      <p className="text-sm text-[#617D8A]">ou se cadastre com</p>
+
+      <div>
+        <Button
+          onClick={onGoogleSubmit}
+          variant="outline"
+          size={"lg"}
+          className="w-full cursor-pointer"
+        >
+          <Image src="/google.svg" alt="Google" width={24} height={24} />
+          Continuar com o Google
+        </Button>
+      </div>
     </Form>
   );
 };
