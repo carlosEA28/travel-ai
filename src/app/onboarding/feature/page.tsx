@@ -28,7 +28,7 @@ const FeatureOnboardingPage = () => {
           </Button>
 
           <Button className="bg-[#12A3ED] cursor-pointer" asChild>
-            <Link href="/">Próximo</Link>
+            <Link href="/onboarding/first-trip">Próximo</Link>
           </Button>
         </div>
       </div>
