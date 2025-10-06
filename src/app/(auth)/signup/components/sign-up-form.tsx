@@ -54,7 +54,7 @@ const SignUpFormComponent = () => {
       fetchOptions: {
         onSuccess: () => {
           setIsLoading(false);
-          router.push("/welcome-onboarding");
+          router.push("/onboarding/welcome");
         },
         onError(context) {
           setIsLoading(false);
