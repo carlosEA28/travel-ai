@@ -15,7 +15,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { CalendarIcon, Loader2 } from "lucide-react";
+import { CalendarIcon, Loader2, X } from "lucide-react";
 import { NumericFormat } from "react-number-format";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -26,6 +26,8 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
+import { CreateTrip } from "@/actions/trip/create-trip";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   destination: z.string().trim().min(1, "Destino obrigatório"),
@@ -37,7 +39,6 @@ const formSchema = z.object({
 
 const CreateTripFormComponent = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [interest, setInterest] = useState<string[]>([]);
 
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -51,8 +52,47 @@ const CreateTripFormComponent = () => {
     },
   });
 
+  function handleAddInterest(
+    e: React.KeyboardEvent<HTMLInputElement>,
+    fieldValue: string,
+    currentInterests: string[],
+    onChange: (val: string[]) => void
+  ) {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      const trimmed = fieldValue.trim();
+      if (!trimmed) return;
+
+      const exists = currentInterests.some(
+        (interest) => interest.toLowerCase() === trimmed.toLowerCase()
+      );
+      if (!exists) {
+        onChange([...currentInterests, trimmed]);
+      }
+      e.currentTarget.value = "";
+    }
+  }
+
+  function handleRemoveInterest(
+    index: number,
+    currentInterests: string[],
+    onChange: (val: string[]) => void
+  ) {
+    const updated = currentInterests.filter((_, i) => i !== index);
+    onChange(updated);
+  }
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    setIsLoading(true);
+    try {
+      await CreateTrip(values);
+      router.push("/");
+    } catch (error) {
+      console.log(error);
+      toast.error("Erro ao gerar a viagem");
+    } finally {
+      setIsLoading(false);
+    }
   }
   return (
     <Form {...form}>
@@ -202,13 +242,41 @@ const CreateTripFormComponent = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Interesses</FormLabel>
+
               <FormControl>
                 <Input
-                  placeholder="Digite seus interesses. Aperte 'Enter' para adicionar."
-                  {...field}
+                  placeholder="Digite e pressione Enter"
                   className="w-full h-14"
+                  onKeyDown={(e) =>
+                    handleAddInterest(
+                      e,
+                      e.currentTarget.value,
+                      field.value,
+                      field.onChange
+                    )
+                  }
                 />
               </FormControl>
+
+              <div className="flex flex-wrap gap-2 mt-2">
+                {field.value.map((item, index) => (
+                  <span
+                    key={index}
+                    className="flex items-center gap-1 bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm"
+                  >
+                    {item}
+                    <button
+                      type="button"
+                      onClick={() =>
+                        handleRemoveInterest(index, field.value, field.onChange)
+                      }
+                    >
+                      <X size={14} />
+                    </button>
+                  </span>
+                ))}
+              </div>
+
               <FormMessage />
             </FormItem>
           )}
