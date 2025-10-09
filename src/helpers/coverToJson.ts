@@ -25,7 +25,6 @@ export const coverToJsonHelper = async (rawText: GenerateContentResponse) => {
   }
 
   try {
-    // 🧼 Limpa blocos de código e espaços extras
     const cleanText = textContent
       .replace(/```json/g, "")
       .replace(/```/g, "")

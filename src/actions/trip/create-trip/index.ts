@@ -1,13 +1,14 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
 import { generateTrip } from "@/app/api/gemini";
 import { GetImageUrl } from "@/app/api/unsplash";
+import { geocodeLocation } from "@/app/api/maptiler";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { headers } from "next/headers";
 import z from "zod";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const createTrip = z.object({
   destination: z.string().trim().min(1, "Destino obrigatório"),
   budget: z.number().min(1, "Orçamento obrigatório"),
@@ -25,7 +26,6 @@ export const CreateTrip = async (params: z.infer<typeof createTrip>) => {
     throw new Error("Unathorized");
   }
 
-  //checar se a trip ja n existe
   const tripExists = await prisma.trip.findFirst({
     where: {
       destination: params.destination,
@@ -40,21 +40,29 @@ export const CreateTrip = async (params: z.infer<typeof createTrip>) => {
     );
   }
 
-  // Call the Gemini function
   const aiResponse = await generateTrip(params);
-
-  //separar parametros
   const landmark = aiResponse.famousLandmark;
   const estimatedCost = aiResponse.estimatedCost;
   const dayPlans = aiResponse.dayPlans;
 
-  //chamar func do unsplash e pegar a public url
-  const response = await GetImageUrl(landmark);
+  const response = await GetImageUrl(landmark || params.destination);
   const imageUrl = response.urls.full;
 
-  //criar a trip
+  for (const day of dayPlans) {
+    for (const activity of day.activities) {
+      if (activity.locationName) {
+        const { lat, lng } = await geocodeLocation(
+          `${activity.locationName} ${params.destination}`
+        );
+        activity.lat = lat;
+        activity.lng = lng;
+      } else {
+        activity.lat = null;
+        activity.lng = null;
+      }
+    }
+  }
 
-  //tirar de any para algum tipo, any para teste
   const trip = await prisma.trip.create({
     data: {
       userId: session.user.id,
@@ -65,19 +73,17 @@ export const CreateTrip = async (params: z.infer<typeof createTrip>) => {
       coverImageUrl: imageUrl,
       estimatedCost,
       dayPlans: {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         create: dayPlans.map((plan: any) => ({
           dayNumber: plan.dayNumber,
-          date: plan.date ? new Date(plan.date) : new Date(params.startDate), // fallback seguro
+          date: plan.date ? new Date(plan.date) : new Date(params.startDate),
           activities: {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             create: plan.activities.map((act: any) => ({
               title: act.title,
               description: act.description ?? null,
               category: act.category ?? null,
-              startTime: act.startTime ?? null,
-              endTime: act.endTime ?? null,
               locationName: act.locationName ?? null,
+              lat: act.lat,
+              lng: act.lng,
               estimatedCost:
                 typeof act.estimatedCost === "number"
                   ? act.estimatedCost

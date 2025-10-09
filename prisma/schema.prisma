@@ -113,11 +113,8 @@ model Activity {
   description   String?
   category      String
   locationName  String?
-  placeId       String?
   lat           Float?
   lng           Float?
-  startTime     String? // "09:00"
-  endTime       String?
   estimatedCost Float?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
