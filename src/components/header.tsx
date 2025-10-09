@@ -2,17 +2,21 @@ import { PlaneTakeoffIcon } from "lucide-react";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 
 const HeaderComponent = async () => {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
 
-  if (!session) {
-    return redirect("/signup");
+  // Only redirect if we're not already on the home page
+  if (!session?.user && typeof window !== "undefined") {
+    return redirect("/");
   }
+
+  const user = session?.user;
+
   return (
     <>
       <header className="flex justify-between items-center w-full h-16 px-10 py-3 border-b border-gray-200 ">
@@ -31,8 +35,9 @@ const HeaderComponent = async () => {
             Create
           </Link>
           <Avatar className="w-10 h-10">
-            <AvatarImage src={session.user.image!} />
-            <AvatarFallback>{session.user.name}</AvatarFallback>
+            {/* Use the safely retrieved user data */}
+            <AvatarImage src={user?.image || undefined} />
+            <AvatarFallback>{user?.name}</AvatarFallback>
           </Avatar>
         </nav>
       </header>

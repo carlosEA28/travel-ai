@@ -85,12 +85,11 @@ const CreateTripFormComponent = () => {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     try {
-      await CreateTrip(values);
-      router.push("/trip/generated/[slug]");
+      const { id } = await CreateTrip(values);
+      router.push(`/trip/generated/${id}`);
     } catch (error) {
-      console.log(error);
-      toast.error("Erro ao gerar a viagem");
-    } finally {
+      console.error("Trip creation error:", error);
+      toast.error("Erro ao gerar a viagem. Por favor, tente novamente.");
       setIsLoading(false);
     }
   }
