@@ -86,7 +86,7 @@ const CreateTripFormComponent = () => {
     setIsLoading(true);
     try {
       await CreateTrip(values);
-      router.push("/");
+      router.push("/trip/generated/[slug]");
     } catch (error) {
       console.log(error);
       toast.error("Erro ao gerar a viagem");
