@@ -10,7 +10,6 @@ const HeaderComponent = async () => {
     headers: await headers(),
   });
 
-  // Only redirect if we're not already on the home page
   if (!session?.user && typeof window !== "undefined") {
     return redirect("/");
   }
@@ -28,14 +27,16 @@ const HeaderComponent = async () => {
           <Link className="text-[#121717] text-base" href={"/"}>
             Home
           </Link>
-          <Link className="text-[#121717] text-base" href={"/"}>
+          <Link
+            className="text-[#121717] text-base"
+            href={`/user/my-trips/${user?.id}`}
+          >
             My Trips
           </Link>
           <Link className="text-[#121717] text-base" href={"/trip/create"}>
             Create
           </Link>
           <Avatar className="w-10 h-10">
-            {/* Use the safely retrieved user data */}
             <AvatarImage src={user?.image || undefined} />
             <AvatarFallback>{user?.name}</AvatarFallback>
           </Avatar>
