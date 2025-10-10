@@ -19,6 +19,28 @@ const MapComponent = async ({ tripId }: LocationPageProps) => {
   const trip = await GetTripById(tripId);
   const days = trip.dayPlans;
 
+  const activitiesWithLocation = days.flatMap((day) =>
+    day.activities.filter(
+      (activity) =>
+        activity.lat !== null &&
+        activity.lng !== null &&
+        !isNaN(activity.lat) &&
+        !isNaN(activity.lng)
+    )
+  );
+
+  const centerLat =
+    activitiesWithLocation.length > 0
+      ? activitiesWithLocation.reduce((sum, act) => sum + (act.lat || 0), 0) /
+        activitiesWithLocation.length
+      : 43.60482759573559;
+
+  const centerLng =
+    activitiesWithLocation.length > 0
+      ? activitiesWithLocation.reduce((sum, act) => sum + (act.lng || 0), 0) /
+        activitiesWithLocation.length
+      : 1.411316557139571;
+
   return (
     <div className="flex h-full overflow-hidden w-full gap-4 p-4">
       <div className="h-full w-[400px] flex-shrink-0 rounded-md border overflow-hidden">
@@ -45,6 +67,11 @@ const MapComponent = async ({ tripId }: LocationPageProps) => {
                             {activity.description}
                           </p>
                         )}
+                        {activity.locationName && (
+                          <p className="mt-1 text-xs text-blue-600">
+                            📍 {activity.locationName}
+                          </p>
+                        )}
                       </div>
                     </div>
                   ))}
@@ -56,16 +83,18 @@ const MapComponent = async ({ tripId }: LocationPageProps) => {
         </ScrollArea>
       </div>
 
-      <div className="flex-1  rounded-md border">
-        <Map
-          center={[43.60482759573559, 1.411316557139571]}
-          className="h-full w-full"
-        >
+      <div className="flex-1 rounded-md border">
+        <Map center={[centerLat, centerLng]} className="h-full w-full">
           <MapTileLayer />
           <MapZoomControl />
-          <MapMarker position={[43.60482759573559, 1.411316557139571]}>
-            <MapPopup>A map component for shadcn/ui.</MapPopup>
-          </MapMarker>
+          {activitiesWithLocation.map((activity) => (
+            <MapMarker
+              key={activity.id}
+              position={[activity.lat!, activity.lng!]}
+            >
+              <MapPopup>{activity.locationName || "Free day"}</MapPopup>
+            </MapMarker>
+          ))}
         </Map>
       </div>
     </div>

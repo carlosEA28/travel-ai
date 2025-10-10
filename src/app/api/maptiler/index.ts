@@ -1,8 +1,8 @@
 const MAPTILER_API_KEY = process.env.MAPTILER_API_KEY!;
 
-export async function geocodeLocation(locationName: string) {
+export async function geocodeLocation(locationName: string, country: string) {
   const encoded = encodeURIComponent(locationName);
-  const url = `https://api.maptiler.com/geocoding/${encoded}.json?key=${MAPTILER_API_KEY}&language=pt`;
+  const url = `https://api.maptiler.com/geocoding/${encoded}.json?key=${MAPTILER_API_KEY}&language=pt&country=${country}`;
 
   const res = await fetch(url);
   if (!res.ok) {

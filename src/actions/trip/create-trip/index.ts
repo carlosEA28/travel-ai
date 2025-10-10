@@ -44,6 +44,7 @@ export const CreateTrip = async (params: z.infer<typeof createTrip>) => {
   const landmark = aiResponse.famousLandmark;
   const estimatedCost = aiResponse.estimatedCost;
   const dayPlans = aiResponse.dayPlans;
+  const country = aiResponse.country;
 
   const response = await GetImageUrl(landmark || params.destination);
   const imageUrl = response.urls.full;
@@ -52,7 +53,8 @@ export const CreateTrip = async (params: z.infer<typeof createTrip>) => {
     for (const activity of day.activities) {
       if (activity.locationName) {
         const { lat, lng } = await geocodeLocation(
-          `${activity.locationName} ${params.destination}`
+          `${activity.locationName} ${params.destination}`,
+          country
         );
         activity.lat = lat;
         activity.lng = lng;
@@ -102,5 +104,5 @@ export const CreateTrip = async (params: z.infer<typeof createTrip>) => {
     },
   });
 
-  return trip;
+  return { ...trip, country };
 };

@@ -24,6 +24,7 @@ Gere um itinerário detalhado em formato **JSON válido** com base nas informaç
   - "estimatedCost": custo total estimado da viagem em reais.  
   - "famousLandmark": nome do ponto turístico mais famoso do destino.  
   - "dayPlans": um array de objetos, um para cada dia entre a data de início e término.
+  - "country": nome do país do destino no padrão ISO 3166-1 alpha-2.
 
 ### Estrutura de cada \`dayPlan\`:
 - \`dayNumber\`: número do dia.  
@@ -53,6 +54,7 @@ Gere um itinerário detalhado em formato **JSON válido** com base nas informaç
 {
   "estimatedCost": 3500,
   "famousLandmark": "Praça do Comércio",
+  "country": "PT",
   "dayPlans": [
     {
       "dayNumber": 1,
