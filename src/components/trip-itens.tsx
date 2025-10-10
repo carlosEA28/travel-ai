@@ -3,7 +3,6 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@radix-ui/react-tabs";
 import { Download, CircleSmall, Heart, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { GetTripById } from "@/actions/trip/get-trip-by-id";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 const TripItensComponent = async ({ tripId }: { tripId: string }) => {
