@@ -3,6 +3,8 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@radix-ui/react-tabs";
 import { Download, CircleSmall, Heart, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { GetTripById } from "@/actions/trip/get-trip-by-id";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const TripItensComponent = async ({ tripId }: { tripId: string }) => {
   // const handleExport = async () => {};
@@ -86,8 +88,10 @@ const TripItensComponent = async ({ tripId }: { tripId: string }) => {
         <Button className="bg-[#12A3ED]">
           Save <Heart />
         </Button>
-        <Button variant={"secondary"}>
-          View in the map <MapPin />
+        <Button variant={"secondary"} asChild>
+          <Link href={`/trip/locations/${trip.id}`}>
+            View in the map <MapPin />
+          </Link>
         </Button>
       </div>
     </div>
