@@ -11,7 +11,7 @@ const GeneratedTripPage = async ({ params }: { params: { slug: string } }) => {
   });
 
   if (!session?.user) {
-    redirect("/");
+    redirect("/signin");
   }
 
   return (

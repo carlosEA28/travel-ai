@@ -14,7 +14,7 @@ const LocationsPage = async ({
   });
 
   if (!session?.user) {
-    redirect("/");
+    redirect("/signin");
   }
 
   const { slug } = await params;
