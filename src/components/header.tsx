@@ -2,17 +2,13 @@ import { PlaneTakeoffIcon } from "lucide-react";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { auth } from "@/lib/auth";
-import { redirect } from "next/navigation";
 import { headers } from "next/headers";
+import { Button } from "./ui/button";
 
 const HeaderComponent = async () => {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
-
-  if (!session?.user && typeof window !== "undefined") {
-    return redirect("/");
-  }
 
   const user = session?.user;
 
@@ -23,7 +19,7 @@ const HeaderComponent = async () => {
           <PlaneTakeoffIcon />
           <h1 className="text-[#121717] text-lg font-bold">TravelAi</h1>
         </div>
-        <nav className="flex items-center gap-4">
+        <nav className="flex items-center gap-9">
           <Link className="text-[#121717] text-base" href={"/"}>
             Home
           </Link>
@@ -36,10 +32,18 @@ const HeaderComponent = async () => {
           <Link className="text-[#121717] text-base" href={"/trip/create"}>
             Create
           </Link>
-          <Avatar className="w-10 h-10">
-            <AvatarImage src={user?.image || undefined} />
-            <AvatarFallback>{user?.name}</AvatarFallback>
-          </Avatar>
+          {user ? (
+            <Avatar className="w-10 h-10">
+              <AvatarImage src={user?.image || undefined} />
+              <AvatarFallback>{user?.name}</AvatarFallback>
+            </Avatar>
+          ) : (
+            <Button className="bg-[#12A3ED]" asChild>
+              <Link className=" text-base" href={"/auth/sign-in"}>
+                Login
+              </Link>
+            </Button>
+          )}
         </nav>
       </header>
     </>
