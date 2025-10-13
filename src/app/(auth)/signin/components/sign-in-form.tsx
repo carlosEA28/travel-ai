@@ -16,7 +16,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import Image from "next/image";
 
@@ -34,6 +34,8 @@ const formSchema = z.object({
 const SignInFormComponent = () => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const session = authClient.useSession();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -66,9 +68,12 @@ const SignInFormComponent = () => {
   async function onGoogleSubmit() {
     await authClient.signIn.social({
       provider: "google",
+
       fetchOptions: {
         onSuccess: () => {
-          router.push("/");
+          if (session?.data?.user) {
+            router.push(`/user/my-trips/${session.data.user.id}`);
+          }
         },
         onError(context) {
           if (context.error) {
@@ -129,7 +134,7 @@ const SignInFormComponent = () => {
         </Button>
       </form>
 
-      <p className="text-sm text-[#617D8A]">ou se cadastre com</p>
+      <p className="text-sm text-[#617D8A]">ou faça login com</p>
 
       <div>
         <Button

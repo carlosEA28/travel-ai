@@ -39,7 +39,7 @@ const HeaderComponent = async () => {
             </Avatar>
           ) : (
             <Button className="bg-[#12A3ED]" asChild>
-              <Link className=" text-base" href={"/auth/sign-in"}>
+              <Link className=" text-base" href={"/signin"}>
                 Login
               </Link>
             </Button>
