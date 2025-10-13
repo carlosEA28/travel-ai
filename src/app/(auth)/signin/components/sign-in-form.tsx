@@ -19,6 +19,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import Image from "next/image";
+import Link from "next/link";
 
 const formSchema = z.object({
   email: z
@@ -146,6 +147,13 @@ const SignInFormComponent = () => {
           <Image src="/google.svg" alt="Google" width={24} height={24} />
           Continuar com o Google
         </Button>
+
+        <p className="text-sm text-[#617D8A] mt-4">
+          Ainda não tem uma conta?{" "}
+          <Link className="text-[#12A3ED]" href="/signup">
+            Crie uma
+          </Link>
+        </p>
       </div>
     </Form>
   );
