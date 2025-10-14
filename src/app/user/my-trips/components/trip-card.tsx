@@ -47,17 +47,14 @@ const TripCardComponent = async () => {
       </div>
 
       <section>
-        <h2 className="text-xl font-semibold mb-6 text-gray-800">Upcoming</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {trips.map((trip) => (
-            <Link 
+            <Link
               key={trip.id}
               href={`/trip/generated/${trip.id}`}
               className="block"
             >
-              <div
-                className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 hover:shadow-lg transition-shadow cursor-pointer"
-              >
+              <div className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 hover:shadow-lg transition-shadow cursor-pointer">
                 <div className="relative h-48">
                   <Image
                     src={trip.coverImageUrl!}
