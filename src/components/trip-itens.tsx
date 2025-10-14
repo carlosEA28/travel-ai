@@ -1,5 +1,5 @@
-import { Separator } from "@radix-ui/react-separator";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@radix-ui/react-tabs";
+import { Separator } from "@/components/ui/separator";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { CircleSmall, Heart, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { GetTripById } from "@/actions/trip/get-trip-by-id";

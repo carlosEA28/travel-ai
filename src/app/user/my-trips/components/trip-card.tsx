@@ -12,6 +12,7 @@ import {
 import { PlaneTakeoffIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import DeleteTripButton from "./delete-trip-button";
 const TripCardComponent = async () => {
   const trips = await GetAllTrips();
 
@@ -66,14 +67,17 @@ const TripCardComponent = async () => {
                 </div>
                 <div className="p-4">
                   <div className="flex justify-between items-start">
-                    <div>
+                    <div className="w-full">
                       <h3 className="font-medium text-lg text-gray-900">
                         {trip.destination}
                       </h3>
-                      <p className="text-[#4D8099]">
-                        {new Date(trip.startDate).toLocaleDateString()} -{" "}
-                        {new Date(trip.endDate).toLocaleDateString()}
-                      </p>
+                      <div className="flex justify-between items-center ">
+                        <p className="text-[#4D8099]">
+                          {new Date(trip.startDate).toLocaleDateString()} -{" "}
+                          {new Date(trip.endDate).toLocaleDateString()}
+                        </p>
+                        <DeleteTripButton tripId={trip.id} />
+                      </div>
                     </div>
                   </div>
                 </div>
