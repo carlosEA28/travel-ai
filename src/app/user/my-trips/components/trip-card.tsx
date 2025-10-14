@@ -50,33 +50,38 @@ const TripCardComponent = async () => {
         <h2 className="text-xl font-semibold mb-6 text-gray-800">Upcoming</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {trips.map((trip) => (
-            <div
+            <Link 
               key={trip.id}
-              className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 hover:shadow-lg transition-shadow"
+              href={`/trip/generated/${trip.id}`}
+              className="block"
             >
-              <div className="relative h-48">
-                <Image
-                  src={trip.coverImageUrl!}
-                  alt={trip.destination}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                />
-              </div>
-              <div className="p-4">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h3 className="font-medium text-lg text-gray-900">
-                      {trip.destination}
-                    </h3>
-                    <p className="text-[#4D8099]">
-                      {new Date(trip.startDate).toLocaleDateString()} -{" "}
-                      {new Date(trip.endDate).toLocaleDateString()}
-                    </p>
+              <div
+                className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 hover:shadow-lg transition-shadow cursor-pointer"
+              >
+                <div className="relative h-48">
+                  <Image
+                    src={trip.coverImageUrl!}
+                    alt={trip.destination}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                  />
+                </div>
+                <div className="p-4">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h3 className="font-medium text-lg text-gray-900">
+                        {trip.destination}
+                      </h3>
+                      <p className="text-[#4D8099]">
+                        {new Date(trip.startDate).toLocaleDateString()} -{" "}
+                        {new Date(trip.endDate).toLocaleDateString()}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </section>

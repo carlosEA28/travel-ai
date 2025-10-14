@@ -28,6 +28,7 @@ import { useForm } from "react-hook-form";
 import z from "zod";
 import { CreateTrip } from "@/actions/trip/create-trip";
 import { toast } from "sonner";
+import { motion, AnimatePresence } from "framer-motion";
 
 const formSchema = z.object({
   destination: z.string().trim().min(1, "Destino obrigatório"),
@@ -94,207 +95,231 @@ const CreateTripFormComponent = () => {
     }
   }
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <FormField
-          control={form.control}
-          name="destination"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Destino</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Para onde você quer ir?"
-                  {...field}
-                  className="w-full h-14"
-                />
-              </FormControl>
-
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <div className="flex gap-4 w-full">
+    <div className="relative">
+      <AnimatePresence>
+        {isLoading && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-white/80 backdrop-blur-sm z-50 flex flex-col items-center justify-center gap-4"
+          >
+            <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primary"></div>
+            <p className="text-lg font-medium text-gray-700">
+              Gerando sua viagem...
+            </p>
+            <p className="text-sm text-gray-500">
+              Isso pode levar alguns segundos
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
             control={form.control}
-            name="startDate"
+            name="destination"
             render={({ field }) => (
-              <FormItem className="flex flex-col w-full">
-                <FormLabel>Partida</FormLabel>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant={"outline"}
-                        className={cn(
-                          "w-full h-14 text-left font-normal",
-                          !field.value && "text-muted-foreground"
-                        )}
-                      >
-                        {field.value ? (
-                          format(field.value, "PPP", {
-                            locale: ptBR,
-                          })
-                        ) : (
-                          <span>Partida</span>
-                        )}
-                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={field.value}
-                      onSelect={field.onChange}
-                      disabled={(date) => date < new Date("1900-01-01")}
-                      captionLayout="dropdown"
-                    />
-                  </PopoverContent>
-                </Popover>
+              <FormItem>
+                <FormLabel>Destino</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Para onde você quer ir?"
+                    {...field}
+                    className="w-full h-14"
+                  />
+                </FormControl>
 
                 <FormMessage />
               </FormItem>
             )}
           />
+          <div className="flex gap-4 w-full">
+            <FormField
+              control={form.control}
+              name="startDate"
+              render={({ field }) => (
+                <FormItem className="flex flex-col w-full">
+                  <FormLabel>Partida</FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant={"outline"}
+                          className={cn(
+                            "w-full h-14 text-left font-normal",
+                            !field.value && "text-muted-foreground"
+                          )}
+                        >
+                          {field.value ? (
+                            format(field.value, "PPP", {
+                              locale: ptBR,
+                            })
+                          ) : (
+                            <span>Partida</span>
+                          )}
+                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={field.value}
+                        onSelect={field.onChange}
+                        disabled={(date) => date < new Date("1900-01-01")}
+                        captionLayout="dropdown"
+                      />
+                    </PopoverContent>
+                  </Popover>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="endDate"
+              render={({ field }) => (
+                <FormItem className="flex flex-col  w-full">
+                  <FormLabel>Volta</FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant={"outline"}
+                          className={cn(
+                            "w-full h-14  text-left font-normal",
+                            !field.value && "text-muted-foreground"
+                          )}
+                        >
+                          {field.value ? (
+                            format(field.value, "PPP", {
+                              locale: ptBR,
+                            })
+                          ) : (
+                            <span>Volta</span>
+                          )}
+                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={field.value}
+                        onSelect={field.onChange}
+                        disabled={(date) => date < new Date("1900-01-01")}
+                        captionLayout="dropdown"
+                      />
+                    </PopoverContent>
+                  </Popover>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
           <FormField
             control={form.control}
-            name="endDate"
+            name="budget"
             render={({ field }) => (
-              <FormItem className="flex flex-col  w-full">
-                <FormLabel>Volta</FormLabel>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant={"outline"}
-                        className={cn(
-                          "w-full h-14  text-left font-normal",
-                          !field.value && "text-muted-foreground"
-                        )}
-                      >
-                        {field.value ? (
-                          format(field.value, "PPP", {
-                            locale: ptBR,
-                          })
-                        ) : (
-                          <span>Volta</span>
-                        )}
-                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={field.value}
-                      onSelect={field.onChange}
-                      disabled={(date) => date < new Date("1900-01-01")}
-                      captionLayout="dropdown"
-                    />
-                  </PopoverContent>
-                </Popover>
-
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-
-        <FormField
-          control={form.control}
-          name="budget"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Orçamento</FormLabel>
-              <FormControl>
-                <NumericFormat
-                  value={
-                    field.value !== undefined && field.value !== null
-                      ? (field.value / 100).toString()
-                      : ""
-                  }
-                  onValueChange={(val) => {
-                    const newValue = (val.floatValue ?? 0) * 100;
-                    if (newValue !== field.value) {
-                      field.onChange(newValue);
+              <FormItem>
+                <FormLabel>Orçamento</FormLabel>
+                <FormControl>
+                  <NumericFormat
+                    value={
+                      field.value !== undefined && field.value !== null
+                        ? (field.value / 100).toString()
+                        : ""
                     }
-                  }}
-                  decimalScale={2}
-                  fixedDecimalScale
-                  decimalSeparator=","
-                  allowNegative={false}
-                  allowLeadingZeros={false}
-                  thousandSeparator="."
-                  customInput={Input}
-                  prefix="R$"
-                  className="w-full h-14"
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="interest"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Interesses</FormLabel>
-
-              <FormControl>
-                <Input
-                  placeholder="Digite e pressione Enter"
-                  className="w-full h-14"
-                  onKeyDown={(e) =>
-                    handleAddInterest(
-                      e,
-                      e.currentTarget.value,
-                      field.value,
-                      field.onChange
-                    )
-                  }
-                />
-              </FormControl>
-
-              <div className="flex flex-wrap gap-2 mt-2">
-                {field.value.map((item, index) => (
-                  <span
-                    key={index}
-                    className="flex items-center gap-1 bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm"
-                  >
-                    {item}
-                    <button
-                      type="button"
-                      onClick={() =>
-                        handleRemoveInterest(index, field.value, field.onChange)
+                    onValueChange={(val) => {
+                      const newValue = (val.floatValue ?? 0) * 100;
+                      if (newValue !== field.value) {
+                        field.onChange(newValue);
                       }
+                    }}
+                    decimalScale={2}
+                    fixedDecimalScale
+                    decimalSeparator=","
+                    allowNegative={false}
+                    allowLeadingZeros={false}
+                    thousandSeparator="."
+                    customInput={Input}
+                    prefix="R$"
+                    className="w-full h-14"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="interest"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Interesses</FormLabel>
+
+                <FormControl>
+                  <Input
+                    placeholder="Digite e pressione Enter"
+                    className="w-full h-14"
+                    onKeyDown={(e) =>
+                      handleAddInterest(
+                        e,
+                        e.currentTarget.value,
+                        field.value,
+                        field.onChange
+                      )
+                    }
+                  />
+                </FormControl>
+
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {field.value.map((item, index) => (
+                    <span
+                      key={index}
+                      className="flex items-center gap-1 bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm"
                     >
-                      <X size={14} />
-                    </button>
-                  </span>
-                ))}
-              </div>
+                      {item}
+                      <button
+                        type="button"
+                        onClick={() =>
+                          handleRemoveInterest(
+                            index,
+                            field.value,
+                            field.onChange
+                          )
+                        }
+                      >
+                        <X size={14} />
+                      </button>
+                    </span>
+                  ))}
+                </div>
 
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <Button
-          size={"lg"}
-          type="submit"
-          className="w-full bg-[#12A3ED] cursor-pointer"
-          disabled={isLoading}
-        >
-          {isLoading ? (
-            <Loader2 size={20} className="animate-spin" />
-          ) : (
-            "Gerar Viagem"
-          )}
-        </Button>
-      </form>
-    </Form>
+          <Button
+            size={"lg"}
+            type="submit"
+            className="w-full bg-[#12A3ED] cursor-pointer"
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <Loader2 size={20} className="animate-spin" />
+            ) : (
+              "Gerar Viagem"
+            )}
+          </Button>
+        </form>
+      </Form>
+    </div>
   );
 };
 
