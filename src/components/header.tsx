@@ -4,6 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { Button } from "./ui/button";
+import { getInitials } from "@/helpers/userInitials";
 
 const HeaderComponent = async () => {
   const session = await auth.api.getSession({
@@ -35,7 +36,7 @@ const HeaderComponent = async () => {
           {user ? (
             <Avatar className="w-10 h-10">
               <AvatarImage src={user?.image || undefined} />
-              <AvatarFallback>{user?.name}</AvatarFallback>
+              <AvatarFallback>{getInitials(user?.name || "")}</AvatarFallback>
             </Avatar>
           ) : (
             <Button
