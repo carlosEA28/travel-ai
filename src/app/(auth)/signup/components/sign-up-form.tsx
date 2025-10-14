@@ -138,7 +138,7 @@ const SignUpFormComponent = () => {
         <Button
           size={"lg"}
           type="submit"
-          className="w-full bg-[#12A3ED] cursor-pointer"
+          className="w-full bg-[#12A3ED] hover:bg-[#0E8DD0] transition-colors cursor-pointer"
           disabled={isLoading}
         >
           {isLoading ? (

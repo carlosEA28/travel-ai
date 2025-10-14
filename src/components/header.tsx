@@ -38,7 +38,10 @@ const HeaderComponent = async () => {
               <AvatarFallback>{user?.name}</AvatarFallback>
             </Avatar>
           ) : (
-            <Button className="bg-[#12A3ED]" asChild>
+            <Button
+              className="bg-[#12A3ED] hover:bg-[#0E8DD0] transition-colors"
+              asChild
+            >
               <Link className=" text-base" href={"/signin"}>
                 Login
               </Link>

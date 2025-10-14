@@ -84,7 +84,7 @@ const TripItensComponent = async ({ tripId }: { tripId: string }) => {
       </Tabs>
 
       <div className="mt-6 flex justify-between ">
-        <Button className="bg-[#12A3ED]">
+        <Button className="bg-[#12A3ED] hover:bg-[#0E8DD0] transition-colors">
           Save <Heart />
         </Button>
         <Button variant={"secondary"} asChild>

@@ -28,7 +28,7 @@ const WelcomeOnboardingPage = () => {
             <Link href="/">Pular</Link>
           </Button>
 
-          <Button className="bg-[#12A3ED] cursor-pointer" asChild>
+          <Button className="bg-[#12A3ED] hover:bg-[#0E8DD0] transition-colors cursor-pointer" asChild>
             <Link href="/onboarding/feature">Próximo</Link>
           </Button>
         </div>
