@@ -40,7 +40,7 @@ export default async function Home() {
                       The Adventurer
                     </p>
                     <p className="text-[14px] text-[#4D8099]">
-                      Explore the world's most thrilling destinations with
+                      Explore the world&apos;s most thrilling destinations with
                       itineraries designed for adrenaline junkies.
                     </p>
                   </div>

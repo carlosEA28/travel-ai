@@ -20,7 +20,7 @@ import { NumericFormat } from "react-number-format";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { enUS } from "date-fns/locale";
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -106,11 +106,9 @@ const CreateTripFormComponent = () => {
           >
             <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primary"></div>
             <p className="text-lg font-medium text-gray-700">
-              Gerando sua viagem...
+              Generating your trip...
             </p>
-            <p className="text-sm text-gray-500">
-              Isso pode levar alguns segundos
-            </p>
+            <p className="text-sm text-gray-500">This may take a few seconds</p>
           </motion.div>
         )}
       </AnimatePresence>
@@ -121,10 +119,10 @@ const CreateTripFormComponent = () => {
             name="destination"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Destino</FormLabel>
+                <FormLabel>Destination</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Para onde você quer ir?"
+                    placeholder="Where do you want to go?"
                     {...field}
                     className="w-full h-14"
                   />
@@ -140,7 +138,7 @@ const CreateTripFormComponent = () => {
               name="startDate"
               render={({ field }) => (
                 <FormItem className="flex flex-col w-full">
-                  <FormLabel>Partida</FormLabel>
+                  <FormLabel>Departure</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
@@ -153,7 +151,7 @@ const CreateTripFormComponent = () => {
                         >
                           {field.value ? (
                             format(field.value, "PPP", {
-                              locale: ptBR,
+                              locale: enUS,
                             })
                           ) : (
                             <span>Partida</span>
@@ -184,7 +182,7 @@ const CreateTripFormComponent = () => {
               name="endDate"
               render={({ field }) => (
                 <FormItem className="flex flex-col  w-full">
-                  <FormLabel>Volta</FormLabel>
+                  <FormLabel>Return</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
@@ -197,7 +195,7 @@ const CreateTripFormComponent = () => {
                         >
                           {field.value ? (
                             format(field.value, "PPP", {
-                              locale: ptBR,
+                              locale: enUS,
                             })
                           ) : (
                             <span>Volta</span>
@@ -230,7 +228,7 @@ const CreateTripFormComponent = () => {
             name="budget"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Orçamento</FormLabel>
+                <FormLabel>Budget</FormLabel>
                 <FormControl>
                   <NumericFormat
                     value={
@@ -264,7 +262,7 @@ const CreateTripFormComponent = () => {
             name="interest"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Interesses</FormLabel>
+                <FormLabel>Interests</FormLabel>
 
                 <FormControl>
                   <Input
@@ -318,7 +316,7 @@ const CreateTripFormComponent = () => {
             {isLoading ? (
               <Loader2 size={20} className="animate-spin" />
             ) : (
-              "Gerar Viagem"
+              "Generate Trip"
             )}
           </Button>
         </form>

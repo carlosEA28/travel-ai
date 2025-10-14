@@ -23,13 +23,13 @@ import Link from "next/link";
 
 const formSchema = z.object({
   email: z
-    .email({ message: "Email inválido" })
+    .email({ message: "Email is invalid" })
     .trim()
-    .min(1, "Email obrigatório"),
+    .min(1, "Email is required"),
   password: z
     .string()
     .trim()
-    .min(8, "A senha deve conter pelo menos 8 caracteres"),
+    .min(8, "Password must be at least 8 characters long"),
 });
 
 const SignInFormComponent = () => {
@@ -52,18 +52,22 @@ const SignInFormComponent = () => {
       email: values.email,
       password: values.password,
       fetchOptions: {
-        onSuccess: () => {
+        onError(error) {
           setIsLoading(false);
-          router.push(`/user/my-trips/${data?.user.id}`);
-        },
-        onError(context) {
-          setIsLoading(false);
-          if (context.error.code === "USER_NOT_FOUND") {
-            toast.error("Usuário não encontrado");
+          if (error) {
+            if (error.error.code === "INVALID_EMAIL_OR_PASSWORD") {
+              toast.error("invalid email or password");
+            } else {
+              toast.error(error.error.message);
+            }
           }
         },
       },
     });
+
+    if (data?.user?.id) {
+      router.push(`/user/my-trips/${data.user.id}`);
+    }
   }
 
   async function onGoogleSubmit() {
@@ -76,9 +80,9 @@ const SignInFormComponent = () => {
             router.push(`/user/my-trips/${session.data.user.id}`);
           }
         },
-        onError(context) {
-          if (context.error) {
-            toast.error(context.error.message);
+        onError(error) {
+          if (error) {
+            toast.error(error.error.message);
           }
         },
       },
@@ -109,7 +113,7 @@ const SignInFormComponent = () => {
             <FormItem>
               <FormControl>
                 <Input
-                  placeholder="Senha"
+                  placeholder="Password"
                   type="password"
                   className="w-full h-14"
                   {...field}
@@ -135,7 +139,7 @@ const SignInFormComponent = () => {
         </Button>
       </form>
 
-      <p className="text-sm text-[#617D8A]">ou faça login com</p>
+      <p className="text-sm text-[#617D8A]">or sign in with</p>
 
       <div>
         <Button
@@ -145,13 +149,13 @@ const SignInFormComponent = () => {
           className="w-full cursor-pointer"
         >
           <Image src="/google.svg" alt="Google" width={24} height={24} />
-          Continuar com o Google
+          Google
         </Button>
 
         <p className="text-sm text-[#617D8A] mt-4">
-          Ainda não tem uma conta?{" "}
+          Don&apos;t have an account?{" "}
           <Link className="text-[#12A3ED]" href="/signup">
-            Crie uma
+            Sign Up
           </Link>
         </p>
       </div>

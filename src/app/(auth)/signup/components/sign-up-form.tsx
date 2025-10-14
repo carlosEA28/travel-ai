@@ -22,15 +22,15 @@ import Image from "next/image";
 import Link from "next/link";
 
 const formSchema = z.object({
-  full_name: z.string().trim().min(1, "Nome obrigatório"),
+  full_name: z.string().trim().min(1, "Name is required"),
   email: z
-    .email({ message: "Email inválido" })
+    .email({ message: "Email is required" })
     .trim()
-    .min(1, "Email obrigatório"),
+    .min(1, "Email is required"),
   password: z
     .string()
     .trim()
-    .min(8, "A senha deve conter pelo menos 8 caracteres"),
+    .min(8, "Password must be at least 8 characters long"),
 });
 
 const SignUpFormComponent = () => {
@@ -60,7 +60,7 @@ const SignUpFormComponent = () => {
         onError(context) {
           setIsLoading(false);
           if (context.error.code === "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL") {
-            toast.error("Email já cadastrado");
+            toast.error("user already exists");
           }
         },
       },
@@ -92,11 +92,7 @@ const SignUpFormComponent = () => {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input
-                  placeholder="Nome Completo"
-                  className="w-full h-14"
-                  {...field}
-                />
+                <Input placeholder="Name" className="w-full h-14" {...field} />
               </FormControl>
 
               <FormMessage />
@@ -123,7 +119,7 @@ const SignUpFormComponent = () => {
             <FormItem>
               <FormControl>
                 <Input
-                  placeholder="Senha"
+                  placeholder="Password"
                   type="password"
                   className="w-full h-14"
                   {...field}
@@ -144,12 +140,12 @@ const SignUpFormComponent = () => {
           {isLoading ? (
             <Loader2 size={20} className="animate-spin" />
           ) : (
-            "Criar Conta"
+            "Sign Up"
           )}
         </Button>
       </form>
 
-      <p className="text-sm text-[#617D8A]">ou se cadastre com</p>
+      <p className="text-sm text-[#617D8A]">or sign up with</p>
 
       <div>
         <Button
@@ -159,13 +155,13 @@ const SignUpFormComponent = () => {
           className="w-full cursor-pointer"
         >
           <Image src="/google.svg" alt="Google" width={24} height={24} />
-          Continuar com o Google
+          Google
         </Button>
 
         <p className="text-sm text-[#617D8A] mt-4">
-          Já tem uma conta?{" "}
+          Already have an account?{" "}
           <Link className="text-[#12A3ED]" href="/signin">
-            Fazer login
+            Sign In
           </Link>
         </p>
       </div>
