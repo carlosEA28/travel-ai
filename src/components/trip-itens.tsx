@@ -1,26 +1,18 @@
 import { Separator } from "@radix-ui/react-separator";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@radix-ui/react-tabs";
-import { Download, CircleSmall, Heart, MapPin } from "lucide-react";
+import { CircleSmall, Heart, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { GetTripById } from "@/actions/trip/get-trip-by-id";
 import Link from "next/link";
 
 const TripItensComponent = async ({ tripId }: { tripId: string }) => {
-  // const handleExport = async () => {};
-
   const trip = await GetTripById(tripId);
 
   return (
     <div className="w-full">
       {/* Título + Botão */}
       <div className="flex w-full items-center justify-between mb-6 flex-wrap gap-4">
-        <h1 className="text-3xl font-bold">
-          Sua Viagem para {trip.destination}
-        </h1>
-        <Button variant={"secondary"} className="flex items-center gap-2">
-          <Download size={18} />
-          Exportar Itinerário
-        </Button>
+        <h1 className="text-3xl font-bold">Your trip to {trip.destination}</h1>
       </div>
 
       {/* Tabs */}
@@ -56,7 +48,7 @@ const TripItensComponent = async ({ tripId }: { tripId: string }) => {
           <TabsContent key={item.dayNumber} value={item.dayNumber.toString()}>
             <div className="space-y-6">
               <p className="text-2xl font-bold">
-                {item.dayNumber}: {item.activities[1].title}
+                {item.dayNumber}: {item.activities[0].title}
               </p>
 
               <div className="relative pl-6">

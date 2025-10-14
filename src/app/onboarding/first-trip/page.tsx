@@ -7,12 +7,12 @@ const FirstTripOnboardingPage = () => {
     <div className="flex flex-col items-center justify-center w-screen h-screen gap-8">
       <div className="flex flex-col items-center gap-3 text-center ">
         <h1 className="text-2xl font-bold text-[#0D171C]">
-          Planeje sua primeira viagem
+          Plan your first trip
         </h1>
 
         <p className="text-base text-[#0D171C]">
-          Começe a planejar a sua viagem dos sonhos com TravelAI. É fácil,
-          rápido e feito especialmente para você.
+          Start planning your dream trip with TravelAI. It&apos;s easy, fast,
+          and made just for you.
         </p>
 
         <Image
@@ -24,7 +24,7 @@ const FirstTripOnboardingPage = () => {
         />
 
         <Button className="bg-[#12A3ED] cursor-pointer w-full" asChild>
-          <Link href="/trip/create">Criar minha primeira viagem</Link>
+          <Link href="/trip/create">Create my first trip</Link>
         </Button>
       </div>
     </div>

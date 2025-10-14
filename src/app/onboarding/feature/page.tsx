@@ -14,21 +14,21 @@ const FeatureOnboardingPage = () => {
           height={0}
         />
         <h1 className="text-2xl font-bold text-[#0D171C]">
-          Personalize a sua jornada
+          Customize your trip
         </h1>
 
         <p className="text-base text-[#0D171C]">
-          Informe seus interesses, orçamento e datas para que a nossa IA possa
-          criar um roteiro sob medida para você.
+          Inform your interests, budget and dates so our AI can create a custom
+          itinerary for you.
         </p>
 
         <div className="w-full flex items-center justify-between">
           <Button className="cursor-pointer" variant={"outline"} asChild>
-            <Link href="/onboarding/welcome">Anterior</Link>
+            <Link href="/onboarding/welcome">Previous</Link>
           </Button>
 
           <Button className="bg-[#12A3ED] cursor-pointer" asChild>
-            <Link href="/onboarding/first-trip">Próximo</Link>
+            <Link href="/onboarding/first-trip"> Next</Link>
           </Button>
         </div>
       </div>

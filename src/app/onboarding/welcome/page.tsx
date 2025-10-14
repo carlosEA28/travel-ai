@@ -14,22 +14,25 @@ const WelcomeOnboardingPage = () => {
           height={0}
         />
         <h1 className="text-2xl font-bold text-[#0D171C]">
-          Bem-vindo ao seu planejador de viagens com IA
+          Welcome to TravelAI
         </h1>
 
         <p className="text-base text-[#0D171C]">
-          Crie roteiros de viagem personalizados com o poder da IA. Explore
-          destinos, personalize suas preferências e embarque em aventuras
-          inesquecíveis.
+          Create personalized travel itineraries with the power of AI. Explore
+          destinations, customize your preferences, and embark on unforgettable
+          adventures.
         </p>
 
         <div className="w-full flex items-center justify-between">
           <Button className="cursor-pointer" variant={"outline"} asChild>
-            <Link href="/">Pular</Link>
+            <Link href="/">Skip</Link>
           </Button>
 
-          <Button className="bg-[#12A3ED] hover:bg-[#0E8DD0] transition-colors cursor-pointer" asChild>
-            <Link href="/onboarding/feature">Próximo</Link>
+          <Button
+            className="bg-[#12A3ED] hover:bg-[#0E8DD0] transition-colors cursor-pointer"
+            asChild
+          >
+            <Link href="/onboarding/feature">Next</Link>
           </Button>
         </div>
       </div>
