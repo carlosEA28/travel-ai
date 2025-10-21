@@ -4,6 +4,7 @@ import { CircleSmall, Heart, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { GetTripById } from "@/actions/trip/get-trip-by-id";
 import Link from "next/link";
+import AiToolsDropdownComponent from "@/app/trip/generated/components/ai-tools-dropdown";
 
 const TripItensComponent = async ({ tripId }: { tripId: string }) => {
   const trip = await GetTripById(tripId);
@@ -76,14 +77,18 @@ const TripItensComponent = async ({ tripId }: { tripId: string }) => {
       </Tabs>
 
       <div className="mt-6 flex justify-between ">
-        <Button className="bg-[#12A3ED] hover:bg-[#0E8DD0] transition-colors">
-          Save <Heart />
-        </Button>
-        <Button variant={"secondary"} asChild>
-          <Link href={`/trip/locations/${trip.id}`}>
-            View in the map <MapPin />
-          </Link>
-        </Button>
+        <div className="flex gap-2">
+          <Button className="bg-[#12A3ED] hover:bg-[#0E8DD0] transition-colors">
+            Save <Heart />
+          </Button>
+          <Button variant={"secondary"} asChild>
+            <Link href={`/trip/locations/${trip.id}`}>
+              View in the map <MapPin />
+            </Link>
+          </Button>
+        </div>
+
+        <AiToolsDropdownComponent city={trip.destination} />
       </div>
     </div>
   );
