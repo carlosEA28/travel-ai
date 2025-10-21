@@ -5,25 +5,32 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Card, CardContent } from "@/components/ui/card";
 
 import { ChevronDown, Loader2 } from "lucide-react";
 import { getTripCurrentWeather } from "@/actions/trip/get-trip-current-weather";
 import { useState } from "react";
+import WeatherCardComponent from "./weather-card";
 
 interface AiToolsDropdownComponentProps {
   city: string;
 }
-
+// criar um schema zod para o retorno do weathr
 const AiToolsDropdownComponent = ({ city }: AiToolsDropdownComponentProps) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [weather, setWeather] = useState<any>(null);
   const handleGetWeather = async (city: string) => {
     setIsLoading(true);
-    const weather = await getTripCurrentWeather(city);
-
-    console.log(weather);
-    setIsLoading(false);
+    try {
+      const weather = await getTripCurrentWeather(city);
+      console.log(weather);
+      setWeather(weather);
+    } catch (error) {
+      console.error("Erro ao buscar o clima:", error);
+    } finally {
+      setIsLoading(false); // Isso garante que o loading sempre será desligado
+    }
   };
+
   return (
     <DropdownMenu
       onOpenChange={(open) => {
@@ -38,31 +45,7 @@ const AiToolsDropdownComponent = ({ city }: AiToolsDropdownComponentProps) => {
         {isLoading ? (
           <Loader2 className="animate-spin" />
         ) : (
-          <Card>
-            <CardContent className="flex items-center gap-6">
-              {/* CURRENT WEATHER */}
-              <div>
-                <div className="flex gap-1">
-                  <p className="text-4xl">24° </p>
-                  <p className="text-4xl">☀️</p>
-                </div>
-                <p className="text-base">Paris</p>
-                <p className="text-sm">Partly cloudy</p>
-              </div>
-
-              {/* FORECAST */}
-              <div className="flex gap-5">
-                <div className="text-center">
-                  <p>Tuesday</p>
-                  <p>☀️</p>
-                  <p className="text-sm">
-                    24° <span className="">13°</span>
-                  </p>
-                </div>
-                {/* ...restante dos dias */}
-              </div>
-            </CardContent>
-          </Card>
+          <WeatherCardComponent weather={weather} />
         )}
       </DropdownMenuContent>
     </DropdownMenu>
