@@ -10,14 +10,15 @@ import { ChevronDown, Loader2 } from "lucide-react";
 import { getTripCurrentWeather } from "@/actions/trip/get-trip-current-weather";
 import { useState } from "react";
 import WeatherCardComponent from "./weather-card";
+import { WeatherData } from "@/types/weather";
 
 interface AiToolsDropdownComponentProps {
   city: string;
 }
-// criar um schema zod para o retorno do weathr
+
 const AiToolsDropdownComponent = ({ city }: AiToolsDropdownComponentProps) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [weather, setWeather] = useState<any>(null);
+  const [weather, setWeather] = useState<WeatherData | null>(null);
   const handleGetWeather = async (city: string) => {
     setIsLoading(true);
     try {

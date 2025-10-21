@@ -1,24 +1,16 @@
 "use client";
 
 import { Card, CardContent } from "@/components/ui/card";
-import { convertWeatherCodeToDescription, getWeatherSvgPath } from "@/helpers/covert-weatherCode";
+import {
+  convertWeatherCodeToDescription,
+  getWeatherSvgPath,
+} from "@/helpers/covert-weatherCode";
 import Image from "next/image";
-
-interface WeatherCardProps {
-  weather: {
-    data: {
-      values: {
-        temperature: number;
-        weatherCode: number;
-      };
-    };
-    location: {
-      name: string;
-    };
-  };
-}
+import { WeatherCardProps } from "@/types/weather";
 
 const WeatherCardComponent = ({ weather }: WeatherCardProps) => {
+  if (!weather) return null;
+
   return (
     <Card>
       <CardContent className="flex items-center gap-6">
@@ -29,7 +21,9 @@ const WeatherCardComponent = ({ weather }: WeatherCardProps) => {
             <div className="relative h-10 w-10">
               <Image
                 src={getWeatherSvgPath(weather.data.values.weatherCode)}
-                alt={convertWeatherCodeToDescription(weather.data.values.weatherCode)}
+                alt={convertWeatherCodeToDescription(
+                  weather.data.values.weatherCode
+                )}
                 fill
                 className="object-contain"
               />
