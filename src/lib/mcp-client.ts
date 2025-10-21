@@ -1,97 +1,70 @@
-import { GoogleGenAI } from "@google/genai";
-import { Client } from "@modelcontextprotocol/sdk/client/index.js";
-import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
-import readline from "readline/promises";
-import dotenv from "dotenv";
+import { Client } from "@modelcontextprotocol/sdk/client";
+import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 
-dotenv.config();
+/**
+ * MyMCPClient
+ * Um cliente simplificado para conectar a um servidor MCP via HTTP.
+ * Exemplo de uso:
+ *   const mcp = new MyMCPClient("http://0.0.0.0:8000/weather/mcp");
+ *   await mcp.connect();
+ *   const result = await mcp.callWeatherTool("São Paulo");
+ */
+export class MyMCPClient {
+  private client: Client;
+  private transport: StreamableHTTPClientTransport;
+  private baseUrl: string;
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-
-if (!GEMINI_API_KEY) {
-  throw new Error("GEMINI_API_KEY is not set");
-}
-
-export class MCPClient {
-  mcp;
-  llm;
-  transport: StdioClientTransport | null = null;
-  tools: {
-    name: string;
-    description?: string;
-    input_schema: any;
-  }[] = [];
-
-  constructor() {
-    this.llm = new GoogleGenAI({
-      apiKey: GEMINI_API_KEY,
-    });
-
-    this.mcp = new Client({
-      name: "mcp-client-cli",
-      version: "1.0.0",
-    });
+  constructor(baseUrl: string) {
+    this.baseUrl = baseUrl;
+    this.transport = new StreamableHTTPClientTransport(new URL(this.baseUrl));
+    this.client = new Client({ name: "frontend-mcp-client", version: "1.0.0" });
   }
 
-  async connectToServer(serverScriptPath: string) {
+  /** Conecta ao servidor MCP remoto via HTTP */
+  async connect() {
     try {
-      const isJs = serverScriptPath.endsWith(".js");
-      const isPy = serverScriptPath.endsWith(".py");
-      if (!isJs && !isPy) {
-        throw new Error("Server script must be a .js or .py file");
-      }
-      const command = isPy
-        ? process.platform === "win32"
-          ? "python"
-          : "python3"
-        : process.execPath;
-      this.transport = new StdioClientTransport({
-        command,
-        args: [serverScriptPath],
-      });
-      await this.mcp.connect(this.transport);
-      const toolsResult = await this.mcp.listTools();
-      this.tools = toolsResult.tools.map((tool) => ({
-        name: tool.name,
-        description: tool.description,
-        input_schema: tool.inputSchema,
-      }));
+      await this.client.connect(this.transport);
+
+      const tools = await this.client.listTools();
       console.log(
-        "Connected to server with tools:",
-        this.tools.map(({ name }) => name)
+        "✅ Conectado ao servidor MCP com as ferramentas:",
+        tools.tools.map((t) => t.name)
       );
-    } catch (e) {
-      console.log("Failed to connect to MCP server: ", e);
-      throw e;
-    }
-  }
 
-  async processQuery(query: string) {
-    try {
-      const result = await this.llm.models.generateContent({
-        model: "gemini-pro",
-        contents: [
-          {
-            role: "user",
-            parts: [{ text: query }],
-          },
-        ],
-        config: {
-          maxOutputTokens: 1000,
-        },
-      });
-
-      // Forma simples e suportada:
-      return result.text;
+      return tools;
     } catch (error) {
-      console.error("Error processing query with Gemini:", error);
+      console.error("❌ Falha ao conectar ao servidor MCP:", error);
       throw error;
     }
   }
 
-  async cleanup() {
-    if (this.mcp) {
-      await this.mcp.close();
+  /** Chama a ferramenta `get_current_location_weather` do servidor MCP */
+  async callWeatherTool(city: string) {
+    try {
+      const result = await this.client.callTool({
+        name: "get_current_location_weather",
+        arguments: { city },
+      });
+
+      // Pega o JSON raw
+      const rawData = result.structuredContent?.result?.raw;
+
+      if (!rawData) {
+        console.error("MCP retornou undefined ou sem raw:", result);
+        throw new Error("Erro ao processar a resposta do MCP");
+      }
+
+      console.log("🌤️ Resultado raw do servidor MCP:", rawData);
+
+      return rawData; // Retorna o JSON completo
+    } catch (error) {
+      console.error("❌ Erro ao chamar a ferramenta MCP:", error);
+      throw error;
     }
+  }
+
+  /** Fecha a conexão MCP */
+  async cleanup() {
+    await this.client.close();
   }
 }
