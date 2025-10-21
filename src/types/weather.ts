@@ -1,30 +1,56 @@
 export interface WeatherValues {
   temperature: number;
+  temperatureApparent: number;
+  temperatureMin: number;
+  temperatureMax: number;
   weatherCode: number;
-  // adicionar outros campos conforme necessário
-  // Por exemplo:
-  // humidity?: number;
-  // windSpeed?: number;
-  // precipitationProbability?: number;
+  weatherCodeMax: number;
+  weatherCodeMin: number;
+  // Add other fields as needed
+}
+
+export interface WeatherTimeline {
+  time: string;
+  values: WeatherValues;
+}
+
+export interface WeatherTimelines {
+  minutely?: WeatherTimeline[];
+  hourly?: WeatherTimeline[];
+  daily?: WeatherTimeline[];
 }
 
 export interface WeatherLocation {
   name: string;
-  // adicionar outros campos de localização se necessário
-  // Por exemplo:
-  // country?: string;
-  // region?: string;
-  // lat?: number;
-  // lon?: number;
+  // Add other location fields as needed
+  lat?: number;
+  lon?: number;
+  country?: string;
+  region?: string;
 }
 
 export interface WeatherData {
-  data: {
+  current?: {
     values: WeatherValues;
   };
-  location: WeatherLocation;
+  location?: WeatherLocation;
+  forecast?: WeatherTimelines;
 }
 
 export interface WeatherCardProps {
   weather: WeatherData | null;
+}
+
+// Types for the forecast component
+export interface ForecastDay {
+  time: string;
+  values: {
+    temperature: number;
+    temperatureApparent: number;
+    temperatureMin: number;
+    temperatureMax: number;
+    weatherCode: number;
+    weatherCodeMax: number;
+    weatherCodeMin: number;
+  };
 }

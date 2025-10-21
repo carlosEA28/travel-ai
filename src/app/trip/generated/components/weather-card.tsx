@@ -34,12 +34,6 @@ const WeatherCardComponent = ({ weather }: WeatherCardProps) => {
             {convertWeatherCodeToDescription(weather.data.values.weatherCode)}
           </p>
         </div>
-
-        {/* FORECAST */}
-        <div className="flex gap-5">
-          {/* <DestinationForecastComponent /> */}
-          {/* ...restante dos dias */}
-        </div>
       </CardContent>
     </Card>
   );
