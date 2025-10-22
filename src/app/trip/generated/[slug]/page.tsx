@@ -6,9 +6,9 @@ import { Suspense } from "react";
 import { headers } from "next/headers";
 
 type GeneratedTripPageParams = {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 };
 
 const GeneratedTripPage = async ({ params }: GeneratedTripPageParams) => {
