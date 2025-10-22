@@ -9,44 +9,44 @@ export async function generateTrip(params: GenerateTripSchema) {
   const response = await ai.models.generateContent({
     model: "gemini-2.5-flash",
     contents: `
-Você é um planejador de viagens inteligente.  
-Gere um itinerário detalhado em formato **JSON válido** com base nas informações a seguir:
+You are an intelligent travel planner.  
+Generate a detailed itinerary in **valid JSON format** based on the following information:
 
-- Destino: ${params.destination}  
-- Data de início: ${params.startDate}  
-- Data de término: ${params.endDate}  
-- Orçamento: ${formatCents(params.budget)}  
-- Interesses do usuário: ${params.interest.join(", ")}  
+- Destination: ${params.destination}  
+- Start Date: ${params.startDate}  
+- End Date: ${params.endDate}  
+- Budget: ${formatCents(params.budget)}  
+- User Interests: ${params.interest.join(", ")}  
 
-### Regras importantes:
-- Responda **somente** com um JSON válido, sem explicações, texto adicional ou formatação extra.  
-- O JSON deve conter os seguintes campos no nível raiz:
-  - "estimatedCost": custo total estimado da viagem em reais.  
-  - "famousLandmark": nome do ponto turístico mais famoso do destino.  
-  - "dayPlans": um array de objetos, um para cada dia entre a data de início e término.
-  - "country": nome do país do destino no padrão ISO 3166-1 alpha-2.
+### Important Rules:
+- Respond **only** with valid JSON, without explanations, additional text, or extra formatting.  
+- The JSON must contain the following root-level fields:
+  - "estimatedCost": total estimated trip cost in Brazilian Reais.  
+  - "famousLandmark": name of the most famous landmark at the destination.  
+  - "dayPlans": an array of objects, one for each day between the start and end date.
+  - "country": destination country name in ISO 3166-1 alpha-2 format.
 
-### Estrutura de cada \`dayPlan\`:
-- \`dayNumber\`: número do dia.  
-- \`date\`: data do dia.  
-- \`activities\`: array de objetos descrevendo cada atividade do dia.
+### Structure of each \`dayPlan\`:
+- \`dayNumber\`: day number.  
+- \`date\`: date of the day.  
+- \`activities\`: array of objects describing each day's activities.
 
-### Estrutura de cada atividade:
-- \`title\`: nome curto da atividade.  
-- \`description\`: detalhes da atividade ou local.  
-- \`category\`: tipo da atividade (ex: "tourism", "food", "entertainment", "walking", etc).  
-- \`startTime\`: horário de início (formato HH:mm).  
-- \`endTime\`: horário de término (formato HH:mm).  
-- \`locationName\`: nome exato do local onde a atividade acontece.  
-- \`placeId\`: identificador único do local (pode ser deixado vazio se não disponível).  
-- \`lat\`: latitude do local (deixe nulo se não souber).  
-- \`lng\`: longitude do local (deixe nulo se não souber).  
-- \`estimatedCost\`: custo estimado da atividade em reais.
+### Structure of each activity:
+- \`title\`: short name of the activity.  
+- \`description\`: details about the activity or location.  
+- \`category\`: type of activity (e.g., "tourism", "food", "entertainment", "walking", etc.).  
+- \`startTime\`: start time (format HH:mm).  
+- \`endTime\`: end time (format HH:mm).  
+- \`locationName\`: exact name of the location where the activity takes place.  
+- \`placeId\`: unique identifier of the location (can be left empty if not available).  
+- \`lat\`: latitude of the location (null if unknown).  
+- \`lng\`: longitude of the location (null if unknown).  
+- \`estimatedCost\`: estimated cost of the activity in Brazilian Reais.
 
-### Instruções adicionais para \`locationName\`:
-- **Analise os campos \`title\` e \`description\` de cada atividade.**
-- Se encontrar o nome de um **ponto turístico, restaurante, museu, praça, mercado ou local específico**, copie esse nome e insira-o automaticamente no campo \`"locationName"\`.
-- Se não encontrar nenhum nome específico, deixe \`"locationName"\` como \`null\`.
+### Additional instructions for \`locationName\`:
+- **Analyze the \`title\` and \`description\` fields of each activity.**
+- If you find the name of a **tourist attraction, restaurant, museum, square, market, or specific location**, copy that name and automatically insert it into the \`"locationName"\` field.
+- If no specific name is found, leave \`"locationName"\` as \`null\`.
 
 ### Exemplo de saída esperada:
 
@@ -61,8 +61,8 @@ Gere um itinerário detalhado em formato **JSON válido** com base nas informaç
       "date": "2025-12-01",
       "activities": [
         {
-          "title": "Café da manhã no Time Out Market",
-          "description": "Comece o dia experimentando iguarias locais no famoso mercado gastronômico Time Out Market.",
+          "title": "Breakfast at Time Out Market",
+          "description": "Start your day by sampling local delicacies at the famous Time Out Market food hall.",
           "category": "food",
           "startTime": "08:30",
           "endTime": "09:30",
@@ -73,12 +73,12 @@ Gere um itinerário detalhado em formato **JSON válido** com base nas informaç
           "estimatedCost": 40
         },
         {
-          "title": "Passeio na Praça do Comércio",
-          "description": "Explorar a icônica praça à beira do Rio Tejo.",
+          "title": "Visit to Commerce Square",
+          "description": "Explore the iconic square by the Tagus River.",
           "category": "tourism",
           "startTime": "10:00",
           "endTime": "12:00",
-          "locationName": "Praça do Comércio",
+          "locationName": "Commerce Square",
           "placeId": "",
           "lat": null,
           "lng": null,
