@@ -78,9 +78,6 @@ const TripItensComponent = async ({ tripId }: { tripId: string }) => {
 
       <div className="mt-6 flex justify-between ">
         <div className="flex gap-2">
-          <Button className="bg-[#12A3ED] hover:bg-[#0E8DD0] transition-colors">
-            Save <Heart />
-          </Button>
           <Button variant={"secondary"} asChild>
             <Link href={`/trip/locations/${trip.id}`}>
               View in the map <MapPin />
