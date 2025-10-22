@@ -7,7 +7,7 @@ import { Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 interface DeleteTripButtonProps {
-  tripId: string;
+  tripId: string | null;
 }
 
 const DeleteTripButton = ({ tripId }: DeleteTripButtonProps) => {
@@ -17,15 +17,13 @@ const DeleteTripButton = ({ tripId }: DeleteTripButtonProps) => {
     e.preventDefault();
     e.stopPropagation();
 
-    if (!confirm("Are you sure you want to delete this trip?")) {
-      return;
-    }
+    if (!tripId) return; // ✅ não quebra a ordem dos hooks
+    if (!confirm("Are you sure you want to delete this trip?")) return;
 
     try {
       setIsDeleting(true);
       await DeleteTrip(tripId);
       toast.success("Trip deleted successfully");
-
       window.location.reload();
     } catch (error) {
       console.error("Error deleting trip:", error);
@@ -34,6 +32,8 @@ const DeleteTripButton = ({ tripId }: DeleteTripButtonProps) => {
       setIsDeleting(false);
     }
   };
+
+  if (!tripId) return null; // retorno visual, mas o hook já foi executado antes
 
   return (
     <Button

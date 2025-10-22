@@ -12,6 +12,7 @@ export const GetAllTrips = async () => {
   if (!session?.user) {
     throw new Error("Unauthorized");
   }
+
   try {
     const trips = await prisma.trip.findMany({
       where: {

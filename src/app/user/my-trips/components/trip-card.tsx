@@ -1,6 +1,5 @@
 import { GetAllTrips } from "@/actions/trip/get-all-trips";
 import Image from "next/image";
-import { toast } from "sonner";
 import {
   Empty,
   EmptyContent,
@@ -16,10 +15,6 @@ import DeleteTripButton from "./delete-trip-button";
 const TripCardComponent = async () => {
   const trips = await GetAllTrips();
 
-  if (!trips) {
-    return toast.error("Error fetching trips");
-  }
-
   if (!trips || trips.length === 0) {
     return (
       <Empty>
@@ -27,7 +22,7 @@ const TripCardComponent = async () => {
           <EmptyMedia variant="icon">
             <PlaneTakeoffIcon />
           </EmptyMedia>
-          <EmptyTitle>Apearently you dont have trips</EmptyTitle>
+          <EmptyTitle>Apparently you don’t have trips</EmptyTitle>
           <EmptyDescription>
             Click the button below to create your first trip
           </EmptyDescription>
@@ -41,6 +36,7 @@ const TripCardComponent = async () => {
     );
   }
 
+  // 🔹 Render principal
   return (
     <div className="space-y-10 w-full">
       <div className="flex justify-between items-center">
@@ -71,12 +67,12 @@ const TripCardComponent = async () => {
                       <h3 className="font-medium text-lg text-gray-900">
                         {trip.destination}
                       </h3>
-                      <div className="flex justify-between items-center ">
+                      <div className="flex justify-between items-center">
                         <p className="text-[#4D8099]">
                           {new Date(trip.startDate).toLocaleDateString()} -{" "}
                           {new Date(trip.endDate).toLocaleDateString()}
                         </p>
-                        <DeleteTripButton tripId={trip.id} />
+                        <DeleteTripButton tripId={trip.id ?? null} />
                       </div>
                     </div>
                   </div>
