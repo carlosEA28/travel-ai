@@ -6,6 +6,7 @@ import { Suspense } from "react";
 import { headers } from "next/headers";
 
 const GeneratedTripPage = async ({ params }: { params: { slug: string } }) => {
+  const resolvedParams = await params;
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -20,7 +21,7 @@ const GeneratedTripPage = async ({ params }: { params: { slug: string } }) => {
       <main className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
           <Suspense fallback={<div>Loading trip details...</div>}>
-            <ItineraryTabs tripId={params.slug} />
+            <ItineraryTabs tripId={resolvedParams.slug} />
           </Suspense>
         </div>
       </main>
