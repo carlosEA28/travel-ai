@@ -8,31 +8,34 @@ import {
 import Image from "next/image";
 import { WeatherCardProps } from "@/types/weather";
 
-const WeatherCardComponent = ({ weather }: WeatherCardProps) => {
-  if (!weather) return null;
+const WeatherCardComponent: React.FC<WeatherCardProps> = ({ weather }) => {
+  if (!weather?.current?.values || !weather.location) {
+    return null;
+  }
+
+  const { temperature, weatherCode } = weather.current.values;
+  const locationName = weather.location.name?.split(",")[0] || 'Unknown Location';
+  const weatherDescription = convertWeatherCodeToDescription(weatherCode);
 
   return (
     <Card>
       <CardContent className="flex items-center gap-6">
-        {/* CURRENT WEATHER */}
         <div>
           <div className="flex gap-1">
-            <p className="text-4xl">{weather.data.values.temperature}° </p>
+            <p className="text-4xl">{temperature}°</p>
             <div className="relative h-10 w-10">
               <Image
-                src={getWeatherSvgPath(weather.data.values.weatherCode)}
-                alt={convertWeatherCodeToDescription(
-                  weather.data.values.weatherCode
-                )}
+                src={getWeatherSvgPath(weatherCode)}
+                alt={weatherDescription}
                 fill
                 className="object-contain"
+                sizes="2.5rem"
+                priority={false}
               />
             </div>
           </div>
-          <p className="text-base">{weather.location.name.split(",")[0]}</p>
-          <p className="text-sm">
-            {convertWeatherCodeToDescription(weather.data.values.weatherCode)}
-          </p>
+          <p className="text-base">{locationName}</p>
+          <p className="text-sm">{weatherDescription}</p>
         </div>
       </CardContent>
     </Card>

@@ -1,8 +1,10 @@
-interface WeatherInfo {
-  text: string;
-  emoji: string;
-  svgPath: string;
+export interface WeatherInfo {
+  readonly text: string;
+  readonly emoji: string;
+  readonly svgPath: string;
 }
+
+type WeatherCode = keyof typeof weather_code_map;
 
 const weather_code_map: Record<number, WeatherInfo> = {
   // Céu limpo e ensolarado
@@ -61,14 +63,13 @@ const weather_code_map: Record<number, WeatherInfo> = {
   8000: { text: "Thunderstorm", emoji: "⛈️", svgPath: "/tempestade.svg" },
 };
 
-export function getWeatherInfo(code: number): WeatherInfo {
-  return weather_code_map[code] || weather_code_map[0]; // Retorna desconhecido se o código não for encontrado
-}
+export const getWeatherInfo = (code: number): WeatherInfo => {
+  return weather_code_map[code as WeatherCode] || weather_code_map[0];
+};
 
-export function convertWeatherCodeToDescription(code: number): string {
-  const { text } = getWeatherInfo(code);
-  return ` ${text}`;
-}
+export const convertWeatherCodeToDescription = (code: number): string => {
+  return getWeatherInfo(code).text;
+};
 
 export function getWeatherSvgPath(code: number): string {
   return getWeatherInfo(code).svgPath;
