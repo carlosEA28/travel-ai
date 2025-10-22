@@ -1,10 +1,9 @@
 import { PlaneTakeoffIcon } from "lucide-react";
 import Link from "next/link";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { Button } from "./ui/button";
-import { getInitials } from "@/helpers/userInitials";
+import AvatarDropdownComponent from "./avatar-dropdown";
 
 const HeaderComponent = async () => {
   const session = await auth.api.getSession({
@@ -34,10 +33,10 @@ const HeaderComponent = async () => {
             Create
           </Link>
           {user ? (
-            <Avatar className="w-10 h-10">
-              <AvatarImage src={user?.image || undefined} />
-              <AvatarFallback>{getInitials(user?.name || "")}</AvatarFallback>
-            </Avatar>
+            <AvatarDropdownComponent
+              name={user.name}
+              image={user.image || null}
+            />
           ) : (
             <Button
               className="bg-[#12A3ED] hover:bg-[#0E8DD0] transition-colors"
