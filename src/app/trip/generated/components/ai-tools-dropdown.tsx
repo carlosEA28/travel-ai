@@ -25,12 +25,16 @@ const AiToolsDropdownComponent = ({ city }: AiToolsDropdownComponentProps) => {
     setIsLoading(true);
     try {
       const weather = await getTripCurrentWeather(city);
-      console.log(weather);
-      setWeather(weather);
+      if (weather && typeof weather === "object" && "location" in weather) {
+        setWeather(weather as WeatherData);
+      } else {
+        setWeather(null);
+      }
     } catch (error) {
       console.error("Erro ao buscar o clima:", error);
+      setWeather(null);
     } finally {
-      setIsLoading(false); // Isso garante que o loading sempre será desligado
+      setIsLoading(false);
     }
   };
 
