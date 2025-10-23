@@ -232,6 +232,14 @@ const config = {
         "fromEnvVar": null,
         "value": "windows",
         "native": true
+      },
+      {
+        "fromEnvVar": null,
+        "value": "debian-openssl-3.0.x"
+      },
+      {
+        "fromEnvVar": null,
+        "value": "rhel-openssl-3.0.x"
       }
     ],
     "previewFeatures": [],
@@ -239,8 +247,7 @@ const config = {
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null,
-    "schemaEnvPath": "../../../.env"
+    "rootEnvPath": null
   },
   "relativePath": "../../../prisma",
   "clientVersion": "6.16.3",
@@ -258,8 +265,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id            String      @id\n  name          String\n  email         String\n  emailVerified Boolean     @default(false)\n  image         String?\n  createdAt     DateTime    @default(now())\n  updatedAt     DateTime    @default(now()) @updatedAt\n  sessions      Session[]\n  accounts      Account[]\n  Trip          Trip[]\n  SavedTrip     SavedTrip[]\n\n  @@unique([email])\n  @@map(\"user\")\n}\n\nmodel Session {\n  id        String   @id\n  expiresAt DateTime\n  token     String\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n  ipAddress String?\n  userAgent String?\n  userId    String\n  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@unique([token])\n  @@map(\"session\")\n}\n\nmodel Account {\n  id                    String    @id\n  accountId             String\n  providerId            String\n  userId                String\n  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)\n  accessToken           String?\n  refreshToken          String?\n  idToken               String?\n  accessTokenExpiresAt  DateTime?\n  refreshTokenExpiresAt DateTime?\n  scope                 String?\n  password              String?\n  createdAt             DateTime  @default(now())\n  updatedAt             DateTime  @updatedAt\n\n  @@map(\"account\")\n}\n\nmodel Verification {\n  id         String   @id\n  identifier String\n  value      String\n  expiresAt  DateTime\n  createdAt  DateTime @default(now())\n  updatedAt  DateTime @default(now()) @updatedAt\n\n  @@map(\"verification\")\n}\n\nmodel Trip {\n  id            String      @id @default(uuid())\n  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)\n  userId        String\n  title         String?\n  destination   String\n  startDate     DateTime\n  endDate       DateTime\n  budget        Float\n  interests     String[]\n  estimatedCost Float?\n  coverImageUrl String?\n  status        String      @default(\"planned\")\n  dayPlans      DayPlan[]\n  SavedTrip     SavedTrip[]\n  createdAt     DateTime    @default(now())\n  updatedAt     DateTime    @updatedAt\n}\n\nmodel DayPlan {\n  id         String     @id @default(uuid())\n  trip       Trip       @relation(fields: [tripId], references: [id], onDelete: Cascade)\n  tripId     String\n  dayNumber  Int\n  date       DateTime\n  notes      String?\n  activities Activity[]\n}\n\nmodel Activity {\n  id            String   @id @default(uuid())\n  dayPlan       DayPlan  @relation(fields: [dayPlanId], references: [id], onDelete: Cascade)\n  dayPlanId     String\n  title         String\n  description   String?\n  category      String\n  locationName  String?\n  lat           Float?\n  lng           Float?\n  estimatedCost Float?\n  createdAt     DateTime @default(now())\n  updatedAt     DateTime @updatedAt\n}\n\nmodel SavedTrip {\n  id        String   @id @default(uuid())\n  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)\n  userId    String\n  trip      Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)\n  tripId    String\n  createdAt DateTime @default(now())\n}\n",
-  "inlineSchemaHash": "5717dcda94d8476c1c31fe24e777635a79304a72886db6c97616f2a58b84fb61",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider      = \"prisma-client-js\"\n  output        = \"../src/generated/prisma\"\n  binaryTargets = [\"native\", \"debian-openssl-3.0.x\", \"rhel-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id            String      @id\n  name          String\n  email         String\n  emailVerified Boolean     @default(false)\n  image         String?\n  createdAt     DateTime    @default(now())\n  updatedAt     DateTime    @default(now()) @updatedAt\n  sessions      Session[]\n  accounts      Account[]\n  Trip          Trip[]\n  SavedTrip     SavedTrip[]\n\n  @@unique([email])\n  @@map(\"user\")\n}\n\nmodel Session {\n  id        String   @id\n  expiresAt DateTime\n  token     String\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n  ipAddress String?\n  userAgent String?\n  userId    String\n  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@unique([token])\n  @@map(\"session\")\n}\n\nmodel Account {\n  id                    String    @id\n  accountId             String\n  providerId            String\n  userId                String\n  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)\n  accessToken           String?\n  refreshToken          String?\n  idToken               String?\n  accessTokenExpiresAt  DateTime?\n  refreshTokenExpiresAt DateTime?\n  scope                 String?\n  password              String?\n  createdAt             DateTime  @default(now())\n  updatedAt             DateTime  @updatedAt\n\n  @@map(\"account\")\n}\n\nmodel Verification {\n  id         String   @id\n  identifier String\n  value      String\n  expiresAt  DateTime\n  createdAt  DateTime @default(now())\n  updatedAt  DateTime @default(now()) @updatedAt\n\n  @@map(\"verification\")\n}\n\nmodel Trip {\n  id            String      @id @default(uuid())\n  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)\n  userId        String\n  title         String?\n  destination   String\n  startDate     DateTime\n  endDate       DateTime\n  budget        Float\n  interests     String[]\n  estimatedCost Float?\n  coverImageUrl String?\n  status        String      @default(\"planned\")\n  dayPlans      DayPlan[]\n  SavedTrip     SavedTrip[]\n  createdAt     DateTime    @default(now())\n  updatedAt     DateTime    @updatedAt\n}\n\nmodel DayPlan {\n  id         String     @id @default(uuid())\n  trip       Trip       @relation(fields: [tripId], references: [id], onDelete: Cascade)\n  tripId     String\n  dayNumber  Int\n  date       DateTime\n  notes      String?\n  activities Activity[]\n}\n\nmodel Activity {\n  id            String   @id @default(uuid())\n  dayPlan       DayPlan  @relation(fields: [dayPlanId], references: [id], onDelete: Cascade)\n  dayPlanId     String\n  title         String\n  description   String?\n  category      String\n  locationName  String?\n  lat           Float?\n  lng           Float?\n  estimatedCost Float?\n  createdAt     DateTime @default(now())\n  updatedAt     DateTime @updatedAt\n}\n\nmodel SavedTrip {\n  id        String   @id @default(uuid())\n  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)\n  userId    String\n  trip      Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)\n  tripId    String\n  createdAt DateTime @default(now())\n}\n",
+  "inlineSchemaHash": "2ec3ae7c8cd29ad5faaf53ce5a51ed9802ab3919bd65a1c8b40643eb547cfed4",
   "copyEngine": true
 }
 
@@ -300,6 +307,14 @@ Object.assign(exports, Prisma)
 // file annotations for bundling tools to include these files
 path.join(__dirname, "query_engine-windows.dll.node");
 path.join(process.cwd(), "src/generated/prisma/query_engine-windows.dll.node")
+
+// file annotations for bundling tools to include these files
+path.join(__dirname, "libquery_engine-debian-openssl-3.0.x.so.node");
+path.join(process.cwd(), "src/generated/prisma/libquery_engine-debian-openssl-3.0.x.so.node")
+
+// file annotations for bundling tools to include these files
+path.join(__dirname, "libquery_engine-rhel-openssl-3.0.x.so.node");
+path.join(process.cwd(), "src/generated/prisma/libquery_engine-rhel-openssl-3.0.x.so.node")
 // file annotations for bundling tools to include these files
 path.join(__dirname, "schema.prisma");
 path.join(process.cwd(), "src/generated/prisma/schema.prisma")
