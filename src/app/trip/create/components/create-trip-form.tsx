@@ -154,7 +154,7 @@ const CreateTripFormComponent = () => {
                               locale: enUS,
                             })
                           ) : (
-                            <span>Partida</span>
+                            <span>Departure</span>
                           )}
                           <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                         </Button>
@@ -198,7 +198,7 @@ const CreateTripFormComponent = () => {
                               locale: enUS,
                             })
                           ) : (
-                            <span>Volta</span>
+                            <span>Return</span>
                           )}
                           <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                         </Button>
@@ -249,7 +249,7 @@ const CreateTripFormComponent = () => {
                     allowLeadingZeros={false}
                     thousandSeparator="."
                     customInput={Input}
-                    prefix="R$"
+                    prefix="$"
                     className="w-full h-14"
                   />
                 </FormControl>
@@ -266,7 +266,7 @@ const CreateTripFormComponent = () => {
 
                 <FormControl>
                   <Input
-                    placeholder="Digite e pressione Enter"
+                    placeholder="Write and press enter"
                     className="w-full h-14"
                     onKeyDown={(e) =>
                       handleAddInterest(
