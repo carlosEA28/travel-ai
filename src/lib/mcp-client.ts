@@ -9,6 +9,13 @@ import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/
  *   await mcp.connect();
  *   const result = await mcp.callWeatherTool("São Paulo");
  */
+
+type StructuredContent = {
+  result?: {
+    raw?: string;
+  };
+};
+
 export class MyMCPClient {
   private client: Client;
   private transport: StreamableHTTPClientTransport;
@@ -48,8 +55,8 @@ export class MyMCPClient {
 
       // await this.client.close();
 
-      // Pega o JSON raw
-      const rawData = result.structuredContent?.result?.raw;
+      const rawData =
+        (result.structuredContent as StructuredContent)?.result?.raw ?? "";
 
       if (!rawData) {
         console.error("MCP retornou undefined ou sem raw:", result);
@@ -58,32 +65,12 @@ export class MyMCPClient {
 
       console.log("🌤️ Resultado raw do servidor MCP:", rawData);
 
-      return rawData; // Retorna o JSON completo
+      return rawData;
     } catch (error) {
       console.error("❌ Erro ao chamar a ferramenta MCP:", error);
       throw error;
     }
   }
-  /** Chama a ferramenta `get_current_location_weather` do servidor MCP */
-  // async callForecastTool(city: string) {
-  //   try {
-  //     const result = await this.client.callTool({
-  //       name: "get_location_forecast",
-  //       arguments: { city },
-  //     });
-
-  //     // Return the raw JSON response
-  //     if (!result.structuredContent?.result?.raw) {
-  //       throw new Error("No raw data received from MCP");
-  //     }
-
-  //     return result.structuredContent.result.raw;
-  //   } catch (error) {
-  //     console.error("❌ Error calling forecast tool:", error);
-  //     throw error;
-  //   }
-  // }
-
   /** Fecha a conexão MCP */
   async cleanup() {
     try {

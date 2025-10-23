@@ -6,7 +6,6 @@ export interface WeatherValues {
   weatherCode: number;
   weatherCodeMax: number;
   weatherCodeMin: number;
-  // Add other fields as needed
 }
 
 export interface WeatherTimeline {
@@ -22,7 +21,7 @@ export interface WeatherTimelines {
 
 export interface WeatherLocation {
   name: string;
-  // Add other location fields as needed
+
   lat?: number;
   lon?: number;
   country?: string;
@@ -33,8 +32,16 @@ export interface WeatherData {
   current?: {
     values: WeatherValues;
   };
+  data?: {
+    values: WeatherValues;
+    location: WeatherLocation;
+  };
+  values?: WeatherValues;
   location?: WeatherLocation;
   forecast?: WeatherTimelines;
+  temp?: number;
+  temp_c?: number;
+  code?: number;
 }
 
 export interface WeatherCardProps {
