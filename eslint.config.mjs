@@ -18,14 +18,13 @@ const eslintConfig = [
       "out/**",
       "build/**",
       "next-env.d.ts",
+      "src/generated/**",
     ],
   },
   {
     rules: {
-      // Desabilita o erro de aliasing do 'this'
       "@typescript-eslint/no-this-alias": "off",
 
-      // Transforma o warning de expressões não usadas em aviso menos restritivo
       "@typescript-eslint/no-unused-expressions": [
         "warn",
         {
