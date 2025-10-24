@@ -36,7 +36,6 @@ const TripCardComponent = async () => {
     );
   }
 
-  // 🔹 Render principal
   return (
     <div className="space-y-10 w-full">
       <div className="flex justify-between items-center">
